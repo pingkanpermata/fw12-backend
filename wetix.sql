@@ -1,5 +1,6 @@
 CREATE DATABASE wetix;
 
+-- Active: 1669401923883@@127.0.0.1@5432@wetix@public
 CREATE TABLE "users" (
     "id"            INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "picture"       VARCHAR(255),
@@ -139,15 +140,16 @@ CREATE TABLE "subscribers" (
 -------INSERT DATA-------
 
 INSERT INTO "users" ("picture","firstName","lastName","phoneNumber","email","password")
-VALUES ('','Erika','Rose','50656009','erikarose@teleworm.us','erika007');
+VALUES ('https://www.freepik.com/free-photo/smiley-woman-posing-indoors_11095773.htm#query=profilewoman&position=9&from_view=search&track=ais',
+'Erika','Rose','50656009','erikarose@teleworm.us','erika007');
 
 INSERT INTO "reset_password" ("email","userId","code")
 VALUES ('erikarose@teleworm.us',1,'rose123');
 
 INSERT INTO "movies" ("title","picture","releaseDate","directedBy","duration","synopsis")
-VALUES ('Tenet','','3 September 2020','Christoper Nolan','2:30:00',
-'Armed with only one word, Tenet, and fighting for the survival of the entire world, 
-a Protagonist journeys through a twilight world of international espionage on a mission 
+VALUES ('Tenet','https://www.imdb.com/title/tt6723592/mediaviewer/rm1748282625/?ref_=tt_ov_i','3 September 2020','Christoper Nolan','2:30:00',
+'Armed with only one word, Tenet, and fighting for the survival of the entire world,
+a Protagonist journeys through a twilight world of international espionage on a mission
 that will unfold in something beyond real time.');
 
 INSERT INTO "genre" ("name")
@@ -186,3 +188,23 @@ VALUES ('','paypal');
 
 INSERT INTO "subscribers" ("email")
 VALUES ('erikarose@teleworm.us');
+
+ALTER TABLE "users" ADD CONSTRAINT "email" UNIQUE ("email");
+ALTER TABLE "movies" ADD CONSTRAINT "title" UNIQUE ("title");
+ALTER TABLE "genre" ADD CONSTRAINT "genreName" UNIQUE ("name");
+ALTER TABLE "casts" ADD CONSTRAINT "castsName" UNIQUE ("name");
+ALTER TABLE "cinema" ADD CONSTRAINT "cinemaName" UNIQUE ("name");
+
+ALTER TABLE "reset_password" ADD CONSTRAINT "fk_userId" FOREIGN KEY ("userId") REFERENCES users (id) ON DELETE ON UPDATE CASCADE;
+ALTER TABLE "movie_genre" ADD CONSTRAINT "fk_movieId" FOREIGN KEY ("movieId") REFERENCES movies (id) ON DELETE ON UPDATE CASCADE;
+ALTER TABLE "movie_casts" ADD CONSTRAINT "fk_castId" FOREIGN KEY ("castsId") REFERENCES casts (id) ON DELETE ON UPFATE CASCADE;
+ALTER TABLE "movie_schedules" ADD CONSTRAINT "fk_movieId" FOREIGN KEY ("movieId") REFERENCES movies (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "movie_schedules" ADD CONSTRAINT "fk_cinemaId" FOREIGN KEY ("cinemaId") REFERENCES cinemas (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "movie_schedules_time" ADD CONSTRAINT "fk_movieScheduleId" FOREIGN KEY ("movie_schedulesId") REFERENCES "movie_schedules" (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "transactions" ADD CONSTRAINT "fk_movieId" FOREIGN KEY ("movieId") REFERENCES movies (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "transactions" ADD CONSTRAINT "fk_cinemaId" FOREIGN KEY ("cinemaId") REFERENCES cinemas (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "transactions" ADD CONSTRAINT "fk_movie_scheduleId" FOREIGN KEY ("movieScheduleID") REFERENCES "movie_schedules" (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "transactions" ADD CONSTRAINT "fk_statusId" FOREIGN KEY ("statusId") REFERENCES "status" (id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+SELECT m.title, g.name as genre FROM "movies" m JOIN "movie_genre" mg ON mg."movieId" = m.id JOIN "genre" g ON g.id = mg."genreId";
+SELECT m.title, c.name as casts FROM "movies" m JOIN "movie_casts" mc ON mc."movieId" = m.id JOIN "casts" c ON c.id = mc."castsId";

@@ -1,6 +1,6 @@
 const usersRouter = require('express').Router()
 
-const { readAllUsers, createUser, updateUser, deleteUser, readUser } = require('../controllers/users.controller')
+const { readAllUsers, createUser, updateUser, deleteUser, readUser, selectCountAllUsers } = require('../controllers/users.controller')
 
 usersRouter.get('/', readAllUsers)
 //ketika /users method get akan dikembalikan ke readAllUsers
@@ -21,5 +21,6 @@ usersRouter.patch('/:id', updateUser)
 usersRouter.delete('/:id', deleteUser)
 //ketika method get akan dikembalikan ke updatedUsers
 //dia menerima data dari Query String
+usersRouter.get('/', selectCountAllUsers)
 
 module.exports = usersRouter
