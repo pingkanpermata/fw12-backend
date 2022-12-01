@@ -22,7 +22,7 @@ const deleteMovieGenre = (req, res) => {
     }
     return res.status(200).json({
       success:true,
-      message: "Movie Casts deleted",
+      message: "Movie Genre deleted",
       results: data.rows[0]
     })
   })

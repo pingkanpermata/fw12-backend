@@ -27,7 +27,7 @@ const deleteGenre = (req, res) => {
     }
     return res.status(200).json({
       success:true,
-      message: "Genre ID deleted",
+      message: "Genre id deleted",
       results: data.rows[0]
     })
   })
@@ -40,7 +40,7 @@ const updateGenreId = (req, res) => {
     }
     return res.status(200).json({
       success: true,
-      message: "Genre ID has been updated",
+      message: "Genre id has been updated",
       results: data.rows[0]
   })
   })
@@ -53,7 +53,7 @@ const createGenres = (req, res) => {
     }
     return res.status(200).json({
       success:true,
-      message: "Create genre ID success",
+      message: "Create genre id success",
       results: data.rows[0]
     })
   })

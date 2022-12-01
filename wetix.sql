@@ -208,3 +208,6 @@ ALTER TABLE "transactions" ADD CONSTRAINT "fk_statusId" FOREIGN KEY ("statusId")
 
 SELECT m.title, g.name as genre FROM "movies" m JOIN "movie_genre" mg ON mg."movieId" = m.id JOIN "genre" g ON g.id = mg."genreId";
 SELECT m.title, c.name as casts FROM "movies" m JOIN "movie_casts" mc ON mc."movieId" = m.id JOIN "casts" c ON c.id = mc."castsId";
+
+ALTER TABLE "users" ALTER COLUMN "password" SET NOT NULL;
+ALTER TABLE "users" ALTER COLUMN "email" SET NOT NULL;

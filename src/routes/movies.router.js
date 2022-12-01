@@ -1,7 +1,9 @@
 const moviesRouter = require('express').Router()
-const {allMovies, movieId, deleteMovieId, updateMovieId, createMovies} = require('../controllers/movies.controller')
+const {allMovies, movieId, deleteMovieId, updateMovieId, createMovies, upComingMovies, nowShowing} = require('../controllers/movies.controller')
 
 moviesRouter.get('/', allMovies)
+moviesRouter.get('/upComingMovies',upComingMovies )
+moviesRouter.get('/nowShowing',nowShowing )
 moviesRouter.get('/:id', movieId)
 moviesRouter.post('/', createMovies)
 moviesRouter.delete('/:id', deleteMovieId )

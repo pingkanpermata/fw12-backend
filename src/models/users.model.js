@@ -1,6 +1,6 @@
 const db = require('../helpers/db.helper')
 
-const readAllUsers= (filter, cb) => { //wajib pake 2 parameter karena yang digunakan response
+const readAll= (filter, cb) => { //wajib pake 2 parameter karena yang digunakan response
   const sql = `SELECT * FROM "users" WHERE "firstName" LIKE $3 ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $1 OFFSET $2`;
   const values = [filter.limit, filter.offset, `%${filter.search}%`]
   db.query(sql, values, cb)
@@ -14,6 +14,12 @@ const selectCountAllUsers = (filter, cb) => {
 const readUser = (data, cb) => {
   const sql = `SELECT * FROM users WHERE id=$1`
   const value = [data.id]
+  db.query(sql, value, cb)
+}
+
+const selectUserByEmail = (email, cb) => {
+  const sql = `SELECT * FROM users WHERE email=$1`
+  const value = [email]
   db.query(sql, value, cb)
 }
 
@@ -35,4 +41,4 @@ const updatedUsers = (data, id, cb) => {
   db.query(sql, value, cb)
 }
 
-module.exports = {readAllUsers, readUser, deletedUser, createUsers, updatedUsers, selectCountAllUsers}
+module.exports = {readAll, readUser, deletedUser, createUsers, updatedUsers, selectCountAllUsers, selectUserByEmail}

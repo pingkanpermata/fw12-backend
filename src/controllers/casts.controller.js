@@ -4,7 +4,7 @@ const filter = require('../helpers/filter')
 
 const allCasts = (req, res)=> {
   const sortable = ['name', 'createdAt', 'updatedAt']
-  filter(req.query, sortable, selectCountallCasts, res, (filter,pageInfo) => {
+  filter(req.query, sortable, selectCountAllCasts, res, (filter,pageInfo) => {
     modelAllCasts(filter, (err,data) => {
       if(err) {
         return errorHandler(err, res)

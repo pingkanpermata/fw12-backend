@@ -1,5 +1,5 @@
 const {modelAllSubscribers, modelDeleteSubscribers, modelUpdateSubscribers, modelCreateSubscribers} = require('../models/subscribers.model')
-const errorHandler = require('../helpers/errorHandler.helper')
+const errorHandler = require('../helpers/errorHandler')
 
 const allSubscribers = (req, res) => {
   modelAllSubscribers(req.body, (err, data) => {
