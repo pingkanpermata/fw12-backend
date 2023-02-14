@@ -1,9 +1,9 @@
-const subscribersRouter = require('express').Router()
-const {allSubscribers, deleteSubscribers, updateSubscribers, createSubscribers} = require('../controllers/subscribers.controller')
+const {readAllSubscribers, createSubscribers, updateSubscribers, deleteSubscribers} = require('../controllers/subscribers.controller')
 
-subscribersRouter.get('/', allSubscribers)
-subscribersRouter.post('/', createSubscribers)
-subscribersRouter.delete('/:id', deleteSubscribers)
-subscribersRouter.patch('/:id', updateSubscribers)
+const subscribersRouters = require('express').Router()
 
-module.exports = subscribersRouter
+subscribersRouters.get('/', readAllSubscribers)
+subscribersRouters.post('/', createSubscribers)
+subscribersRouters.patch('/:id', updateSubscribers)
+subscribersRouters.delete('/:id', deleteSubscribers)
+module.exports = subscribersRouters

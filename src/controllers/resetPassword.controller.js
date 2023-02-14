@@ -1,9 +1,14 @@
-const {displayStatus, insertStatus, removeStatus, editStatus} = require('../models/status.models')
+const {
+  displayResetPassword,
+  insertResetPassword,
+  removeResetPassword,
+  editResetPassword
+} = require('../models/resetPassword.models')
 const errorHandler = require('../helpers/errorHandler.helpers')
 
-exports.readAllStatus = (req, res)=> {
-  displayStatus((err,data)=> {
-    if(err){
+exports.readResetPassword = (req, res) => {
+  displayResetPassword((err, data) => {
+    if (err) {
       console.log(err)
       return res.status(500).json({
         success: false,
@@ -14,13 +19,13 @@ exports.readAllStatus = (req, res)=> {
     return res.status(200).json({
       success: true,
       result: data.rows
-     })
+    })
   })
 }
 
-exports.createStatus = (req, res)=> {
-  insertStatus(req.body, (err,data)=> {
-    if(err){
+exports.createResetPassword = (req, res) => {
+  insertResetPassword(req.body, (err, data) => {
+    if (err) {
       console.log(err)
       return res.status(500).json({
         success: true,
@@ -35,9 +40,9 @@ exports.createStatus = (req, res)=> {
   })
 }
 
-exports.updateStatus = (req, res)=> {
-  editStatus(req.params.id, req.body, (err,data)=> {
-    if(err){
+exports.updateResetPassword = (req, res) => {
+  editResetPassword(req.params.id, req.body, (err, data) => {
+    if (err) {
       console.log(err)
       return res.status(500).json({
         success: false,
@@ -51,9 +56,9 @@ exports.updateStatus = (req, res)=> {
   })
 }
 
-exports.deleteStatus = (req,res)=> {
-  removeStatus(req.params.id, (err, data)=> {
-    if(err){
+exports.deleteResetPassword = (req, res) => {
+  removeResetPassword(req.params.id, (err, data) => {
+    if (err) {
       console.log(err)
       return res.status(500).json({
         success: false,

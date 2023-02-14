@@ -1,9 +1,14 @@
-const {displayStatus, insertStatus, removeStatus, editStatus} = require('../models/status.models')
+const {
+  displayCinemas,
+  insertCinemas,
+  removeCinemas,
+  editCinemas
+} = require('../models/cinemas.models')
 const errorHandler = require('../helpers/errorHandler.helpers')
 
-exports.readAllStatus = (req, res)=> {
-  displayStatus((err,data)=> {
-    if(err){
+exports.readAllCinemas = (req, res) => {
+  displayCinemas((err, data) => {
+    if (err) {
       console.log(err)
       return res.status(500).json({
         success: false,
@@ -14,13 +19,13 @@ exports.readAllStatus = (req, res)=> {
     return res.status(200).json({
       success: true,
       result: data.rows
-     })
+    })
   })
 }
 
-exports.createStatus = (req, res)=> {
-  insertStatus(req.body, (err,data)=> {
-    if(err){
+exports.createCinemas = (req, res) => {
+  insertCinemas(req.body, (err, data) => {
+    if (err) {
       console.log(err)
       return res.status(500).json({
         success: true,
@@ -35,9 +40,9 @@ exports.createStatus = (req, res)=> {
   })
 }
 
-exports.updateStatus = (req, res)=> {
-  editStatus(req.params.id, req.body, (err,data)=> {
-    if(err){
+exports.updateCinemas = (req, res) => {
+  editCinemas(req.params.id, req.body, (err, data) => {
+    if (err) {
       console.log(err)
       return res.status(500).json({
         success: false,
@@ -51,9 +56,9 @@ exports.updateStatus = (req, res)=> {
   })
 }
 
-exports.deleteStatus = (req,res)=> {
-  removeStatus(req.params.id, (err, data)=> {
-    if(err){
+exports.deleteCinemas = (req, res) => {
+  removeCinemas(req.params.id, (err, data) => {
+    if (err) {
       console.log(err)
       return res.status(500).json({
         success: false,

@@ -1,80 +1,69 @@
-const {readAll, readUser, deletedUser, createUsers , updatedUsers, selectCountAllUsers} = require('../models/users.model')
-const errorHandler = require('../helpers/errorHandler')
-const filter = require ('../helpers/filter')
-
-const readAllUsers = (req, res) => {
-  const sortable = ['firstName', 'lastName', 'phoneNumber', 'email', 'password','createdAt', 'updateAt']
-  filter(req.query, sortable, selectCountAllUsers, res, (filter,pageInfo) => {
-    readAll(filter, (err, data) => {
-      if(err) {
-          return errorHandler(err,res)
-      }
-      return res.status(200).json({
-        success: true,
-        message: "Data Users success loaded",
-        pageInfo,
-        results: data.rows[0]
-  })
-    })
-  })
-}
-
-const readUserId = (req, res) => {
-  readUser (req.params, (err, data) => { //req.params => bisa dilihat di endpoint /:id jika req.body / aja
-    if(err) {
-        return errorHandler(err,res)
-    }
-    return res.status(200).json({
+const {createUsers, deleteUsers, getAllUsers, updateUsers, selectUserById} = require('../models/users.models')
+const errorHandler = require('../helpers/errorHandler.helpers')
+exports.getAllUsers = async (req, res) => {
+  try{
+    const allUsers = await getAllUsers()
+    res.status(200).json({
       success: true,
-      message: "Data user id success",
-      results: data.rows[0]
+      message: "All Users retrieved successfully",
+      results: allUsers,
     })
-  })
+  } catch (error) {
+    if (error) return errorHandler(error, res)
+  }
 }
-const deletedUserId = (req, res) => {
 
-  deletedUser(req.params, (err,data) => { //req.params => bisa dilihat di endpoint /:id jika req.body / aja
-    if(err) {
-        return errorHandler(err,res)
-    }
-    return res.status(200).json({
+exports.createUsers = async (req, res) => {
+  try{
+    const users = await createUsers(req.body)
+    res.status(200).json({
       success: true,
-      message: "Deleted user ID success",
-      results: data.rows[0]
+      message: "Users created successfully",
+      results: users,
     })
-  })
+  } catch (error){
+    if (error) return errorHandler(error, res)
+  }
 }
 
-const updatedUserId = (req, res) => {
-  updatedUsers(req.body, req.params.id, (err, data) => {
-    if(err) {
-        return errorHandler(err,res)
-    }
-    return res.status(200).json({
+exports.updateUsers = async (req, res) => {
+  try{
+    const users = await updateUsers(
+      req.body,
+      req.params.id,
+    )
+    res.status(200).json({
       success: true,
-      message: "Updated user success",
-      results: data.rows[0]
+      message: "Users updated successfully",
+      results: users,
     })
-  })
+  } catch (error) {
+    if (error) return errorHandler(error, res)
+  }
 }
 
-const createAllUsers = (req, res) => {
-  createUsers(req.body, (err, data) => {
-    if(req.body.email === "") {
-      return res.status(406).json({
-        success: true,
-        message: "Email required",
-      });
-    }
-    if (err) {
-      return errorHandler(err, res);
-    }
-    return res.status(200).json({
+exports.deleteUsers = async (req, res) => {
+  try{
+    const users = await deleteUsers(req.params.id)
+    res.status(200).json({
       success: true,
-      message: "Create user success",
-      results: data.rows[0]
+      message: "User deleted successfully",
+      results: users,
     })
-  })
+  } catch (error) {
+    if (error) return errorHandler(error, res)
+  }
 }
 
-module.exports = {readAllUsers, createAllUsers, deletedUserId, updatedUserId, readUserId}
+exports.getUserById = async (req, res) => {
+  try{
+    const Users = await selectUserById(req.params.id)
+    res.status(200).json({
+      success: true,
+      message: "User retrieved successfully",
+      results: Users,
+    })
+  } catch (error) {
+    if (error) return errorHandler(error, res)
+  }
+}

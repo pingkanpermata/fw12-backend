@@ -1,61 +1,86 @@
-const {modelAllCasts, modelDeltecasts, modelUpdateCasts, modelCreatecasts, selectCountAllCasts} = require('../models/casts.model')
-const errorHandler = require('../helpers/errorHandler')
-const filter = require('../helpers/filter')
+const {insertCasts, removeCasts, displayCasts, selectCountAllCasts, editCasts} = require('../models/casts.models')
 
-const allCasts = (req, res)=> {
-  const sortable = ['name', 'createdAt', 'updatedAt']
-  filter(req.query, sortable, selectCountAllCasts, res, (filter,pageInfo) => {
-    modelAllCasts(filter, (err,data) => {
-      if(err) {
-        return errorHandler(err, res)
-      }
-      return res.status(200).json({
-        success: true,
-        message: "Data Casts success loaded",
-        pageInfo,
-        result: data.rows
+exports.readAllCasts = (req, res) => {
+  req.query.page = parseInt(req.query.page) || 1
+  req.query.limit = parseInt(req.query.limit) || 5
+  req.query.search = req.query.search || ''
+  const sortable = ['name','createdAt','updatedAt']
+  req.query.sortBy = (sortable.includes(req.query.sortBy) && req.query.sortBy) || 'createdAt'
+  req.query.sort = req.query.sort || 'ASC'
+  const filter = {
+    limit: req.query.limit,
+    offset: (parseInt(req.query.page) - 1) * req.query.limit,
+    search: req.query.search,
+    sort: req.query.sort,
+    sortBy: req.query.sortBy
+  }
+  const pageInfo ={
+    page: req.query.page,
+
+  }
+  selectCountAllCasts(filter, (err,data)=> {
+    pageInfo.totalData = parseInt(data.rows[0].totalData)
+    pageInfo.totalPage = Math.ceil(pageInfo.totalData / req.query.limit)
+    pageInfo.nextPage = req.query.page < pageInfo.totalPage ? req.query.page + 1 : null
+    pageInfo.prevPage = req.query.page > 1 ? req.query.page - 1 : null
+    displayCasts(filter, (err, data)=> {
+    if(err){
+      console.log(err)
+      return res.status(500).json({
+        success: false,
+        message: 'Something happen in our backend',
       })
-    })
-  })
-}
-
-const deleteCasts = (req, res) => {
-  modelDeletecasts(req.params, (err,data) => {
-    if(err) {
-      return errorHandler(err,res)
     }
     return res.status(200).json({
       success: true,
-      message: "Cast id deleted",
-      result: datarows[0]
+      pageInfo,
+      results: data.rows
     })
+  })
   })
 }
 
-const updateCasts = (req, res) => {
-  modelUpdateCasts(req.body, req.params.id, (err, data) => {
-    if (err) {
-      return errorHandler(err,res)
+exports.createCasts = (req, res)=> {
+  insertCasts(req.body, (err,data)=>{
+    if(err){
+      errorHandler(err,res)
+  }
+  return res.status(200).json({
+    success: true,
+    message: "User created successfully",
+    results: data.rows[0]
+  })
+  })
+}
+
+exports.updateCasts = (req, res)=> {
+  editCasts(req.body, (err,data)=> {
+    if(err){
+      console.log(err)
+      return res.status(500).json({
+        success: false,
+        message: 'Something happen in our backend',
+      })
     }
     return res.status(200).json({
       success: true,
-      message: "Cast id has been updated",
-      results: data.rows[0]
-  })
-  })
-}
-
-const createCasts = (req, res) => {
-  modelCreateCasts(req.body, (err,data) => {
-    if(err) {
-      return errorHandler(err,res)
-    }
-    return res.status(200).json({
-      success:true,
-      message: "Create Cast id success",
-      results: data.rows[0]
+      message: 'User updated successfully'
     })
   })
 }
 
-module.exports = {allCasts, deleteCasts, updateCasts, createCasts}
+exports.deleteCasts = (req,res)=> {
+  removeCasts(req.params.id, (err, data)=> {
+    if(err){
+      console.log(err)
+      return res.status(500).json({
+        success: false,
+        message: 'Something happen in our backend',
+      })
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Data deleted successfully"
+    })
+  })
+}

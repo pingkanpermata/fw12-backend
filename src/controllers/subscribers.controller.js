@@ -1,57 +1,73 @@
-const {modelAllSubscribers, modelDeleteSubscribers, modelUpdateSubscribers, modelCreateSubscribers} = require('../models/subscribers.model')
-const errorHandler = require('../helpers/errorHandler')
+const {
+  displaySubscribers,
+  insertSubscribers,
+  removeSubscribers,
+  editSubscribers
+} = require('../models/subscribers.models')
+const errorHandler = require('../helpers/errorHandler.helpers')
 
-const allSubscribers = (req, res) => {
-  modelAllSubscribers(req.body, (err, data) => {
-    if(err) {
-        return errorHandler(err,res)
-    }
-    return res.status(200).json({
-      success: true,
-      message: "Data Subscribers success loaded",
-      results: data.rows
-    })
-  })
-}
-
-
-const deleteSubscribers = (req, res) => {
-  modelDeleteSubscribers(req.params, (err,data) => {
-    if(err) {
-      return errorHandler(err,res)
-    }
-    return res.status(200).json({
-      success:true,
-      message: "Subscribers deleted",
-      results: data.rows[0]
-    })
-  })
-}
-
-const updateSubscribers = (req, res) => {
-  modelUpdateSubscribers(req.body, req.params.id, (err, data) => {
+exports.readAllSubscribers = (req, res) => {
+  displaySubscribers((err, data) => {
     if (err) {
-      return errorHandler(err,res)
+      console.log(err)
+      return res.status(500).json({
+        success: false,
+        message: 'Something happen in our backend',
+      })
     }
+
     return res.status(200).json({
       success: true,
-      message: "Subscribers has been updated",
-      results: data.rows[0]
-  })
+      result: data.rows
+    })
   })
 }
 
-const createSubscribers = (req, res) => {
-  modelCreateSubscribers(req.body, (err,data) => {
-    if(err) {
-      return errorHandler(err,res)
+exports.createSubscribers = (req, res) => {
+  insertSubscribers(req.body, (err, data) => {
+    if (err) {
+      console.log(err)
+      return res.status(500).json({
+        success: true,
+        message: "User created failed"
+      })
     }
     return res.status(200).json({
-      success:true,
-      message: "Create Subscriber success",
+      success: true,
+      message: "User created successfully",
       results: data.rows[0]
     })
   })
 }
 
-module.exports = {allSubscribers, deleteSubscribers, updateSubscribers, createSubscribers}
+exports.updateSubscribers = (req, res) => {
+  editSubscribers(req.params.id, req.body, (err, data) => {
+    if (err) {
+      console.log(err)
+      return res.status(500).json({
+        success: false,
+        message: 'Something happen in our backend',
+      })
+    }
+    return res.status(200).json({
+      success: true,
+      message: 'User updated successfully'
+    })
+  })
+}
+
+exports.deleteSubscribers = (req, res) => {
+  removeSubscribers(req.params.id, (err, data) => {
+    if (err) {
+      console.log(err)
+      return res.status(500).json({
+        success: false,
+        message: 'Something happen in our backend',
+      })
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Data deleted successfully"
+    })
+  })
+}

@@ -1,105 +1,127 @@
-const {modelMovies,modelmovieId,modelDeleteMovie,modelUpdateMovie,modelCreateMovie,selectCountAllMovies,
-  modelUpComingMovies,modelNowShowing} = require("../models/movies.model");
-const errorHandler = require("../helpers/errorHandler");
-const filter = require("../helpers/filter");
+const { displayMovies, insertMovies, removeMovies, editMovies, nowShowingMovie, countAllMovies, selectOneMovies } = require('../models/movies.models')
+const filter = require('../helpers/filter.helpers')
+const errorHandler = require('../helpers/errorHandler.helpers')
 
-const allMovies = (req, res)=> {
-  console.log(req.userData);
-  const sortable = ["title","releaseDate","director","duration","synopsis","createdAt","updateAt"];
-  filter(req.query, sortable, selectCountAllMovies, res, (filter, pageInfo) => {
-    modelMovies(filter, (err, data) => {
-      if(err) {
-        return errorHandler(err, res)
+exports.readAllMovies = (req, res)=> {
+  req.query.limit = parseInt(req.query.limit) || 5
+  req.query.page = parseInt(req.query.page) || 1
+  req.query.search = req.query.search || ''
+  const sortable = ['title','createdAt','updatedAt']
+  req.query.sortBy = (sortable.includes(req.query.sortBy) && req.query.sortBy)|| 'createdAt'
+  req.query.sort = req.query.sort || 'ASC'
+  const filter = {
+    limit: req.query.limit,
+    offset: (parseInt(req.query.page) - 1) * req.query.limit,
+    search: req.query.search,
+    sort: req.query.sort,
+    sortBy: req.query.sortBy
+  }
+
+const pageInfo = {
+  page: req.query.page,
+
+}
+    countAllMovies(filter, (err, data)=> {
+      if(err){
+        console.log(err)
+        return res.status(500).json({
+          success: false,
+          message: 'Something happen in our backend'
+        })
+      }
+      pageInfo.dataCount = parseInt(data.rows[0].dataCount)
+      pageInfo.totalPage = Math.ceil(pageInfo.dataCount / req.query.limit)
+      pageInfo.nextPage = req.query.page < pageInfo.totalPage ? req.query.page + 1 : null
+      pageInfo.prevPage = req.query.page > 1 ? req.query.page - 1 : null
+      displayMovies(filter, (err, data)=> {
+        if(err){
+          console.log(err)
+          return res.status(500).json({
+            success: false,
+            message: 'Something happen in our backend'
+          })
+        }
+        return res.status(200).json({
+          success: true,
+          pageInfo,
+          result: data.rows
+        })
+      })
+    })
+}
+
+exports.createMovies = async (req, res) => {
+  try {
+    if (req.file) {
+      console.log(req.file)
+      req.body.picture = req.file.filename
+    }
+    const newMovies = await insertMovies(req.body, (err, data) => {
+      if (err) {
+        console.log(err)
+        return res.status(500).json({
+          success: false,
+          message: "Data created failed"
+        })
       }
       return res.status(200).json({
-        success:true,
-        message: "Data Movies success loaded",
-        pageInfo,
+        success: true,
+        message: "Data created successfully",
         results: data.rows[0]
-      });
-    });
-  });
-};
-
-const movieId = (req,res) => {
-  modelmovieId(req.params, (err,data) => {
-    if(err) {
-      return errorHandler(err,res)
+      })
+    })
+  } catch (error) {
+    if(error) throw error
+  }
+}
+exports.updateMovies = (req, res) => {
+      if (req.file) {
+        console.log(req.file)
+        req.body.picture = req.file.filename
+      }
+      editMovies(req.params.id, req.body, (err, data) => {
+        if (err) {
+          console.log(err)
+          return res.status(500).json({
+            success: false,
+            message: 'Something happen in our backend',
+          })
+        }
+        return res.status(200).json({
+          success: true,
+          message: 'Data updated successfully'
+        })
+      })
     }
-    return res.status(200).json({
-      success: true,
-      message: "Id Data movie success",
-      results: data.rows[0]
-    });
-  });
-};
 
-const deleteMovieId = (req, res) => {
-  modelDeleteMovie(req.params, (err,data) => {
-    if(err) {
-      return errorHandler(err,res)
+exports.deleteMovies = (req, res) => {
+      removeMovies(req.params.id, (err, data) => {
+        if (err) {
+          console.log(err)
+          return res.status(500).json({
+            success: false,
+            message: 'Something happen in our backend',
+          })
+        }
+        return res.status(200).json({
+          success: true,
+          message: "Data deleted successfully"
+        })
+      })
     }
-    return res.status(200).json({
-      success:true,
-      message: "Movie id deleted",
-      results: data.rows[0]
-    });
-  });
-};
 
-const updateMovieId = (req, res) => {
-  modelUpdateMovie(req.body, req.params.id, (err, data) => {
-    if (err) {
-      return errorHandler(err,res)
+exports.nowShowing = (req, res) => {
+      nowShowingMovie((err, data) => {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            message: 'Something happen in our backend'
+          })
+        }
+        return res.status(200).json({
+          success: true,
+          message: 'Showed',
+          results: data.rows
+        })
+      })
     }
-    return res.status(200).json({
-      success: true,
-      message: "Movie id has been updated",
-      results: data.rows[0]
-  });
-  });
-};
-
-const createMovies = (req, res) => {
-  modelCreateMovie(req.body, (err,data) => {
-    if(err) {
-      return errorHandler(err,res)
-    }
-    return res.status(200).json({
-      success:true,
-      message: "Create Movie id success",
-      results: data.rows[0]
-    });
-  });
-};
-
-const upComingMovies = (req, res) => {
-  modelUpComingMovies((err, data) => {
-    if (err) {
-      errorHandler(err);
-    }
-    return res.status(200).json({
-      success: true,
-      message: "Up Coming Movies success loaded",
-      results: data.rows,
-    });
-  });
-};
-
-const nowShowing = (req, res) => {
-  const month = req.query.month || new Date().toLocaleString('default', {month : 'long'})
-  const year = req.query.year || new Date().getFullYear()
-  console.log(month, year)
-  modelNowShowing(month, year, (err, data) => {
-    if (err) {
-      errorHandler(err);
-    }
-    return res.status(200).json({
-      success: true,
-      message: "Now Showing Movies success loaded",
-      results: data.rows,
-    });
-  });
-};
-
-module.exports = {allMovies, movieId, deleteMovieId, updateMovieId, createMovies, upComingMovies, nowShowing};

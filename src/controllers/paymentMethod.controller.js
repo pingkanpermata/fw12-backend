@@ -1,9 +1,14 @@
-const {displayStatus, insertStatus, removeStatus, editStatus} = require('../models/status.models')
+const {
+  displayPayment,
+  insertPayment,
+  removePayment,
+  editPayment
+} = require('../models/paymentMethod.models')
 const errorHandler = require('../helpers/errorHandler.helpers')
 
-exports.readAllStatus = (req, res)=> {
-  displayStatus((err,data)=> {
-    if(err){
+exports.readAllPayment = (req, res) => {
+  displayPayment((err, data) => {
+    if (err) {
       console.log(err)
       return res.status(500).json({
         success: false,
@@ -14,13 +19,13 @@ exports.readAllStatus = (req, res)=> {
     return res.status(200).json({
       success: true,
       result: data.rows
-     })
+    })
   })
 }
 
-exports.createStatus = (req, res)=> {
-  insertStatus(req.body, (err,data)=> {
-    if(err){
+exports.createPayment = (req, res) => {
+  insertPayment(req.body, (err, data) => {
+    if (err) {
       console.log(err)
       return res.status(500).json({
         success: true,
@@ -35,9 +40,9 @@ exports.createStatus = (req, res)=> {
   })
 }
 
-exports.updateStatus = (req, res)=> {
-  editStatus(req.params.id, req.body, (err,data)=> {
-    if(err){
+exports.updatePayment = (req, res) => {
+  editPayment(req.params.id, req.body, (err, data) => {
+    if (err) {
       console.log(err)
       return res.status(500).json({
         success: false,
@@ -51,9 +56,9 @@ exports.updateStatus = (req, res)=> {
   })
 }
 
-exports.deleteStatus = (req,res)=> {
-  removeStatus(req.params.id, (err, data)=> {
-    if(err){
+exports.deletePayment = (req, res) => {
+  removePayment(req.params.id, (err, data) => {
+    if (err) {
       console.log(err)
       return res.status(500).json({
         success: false,

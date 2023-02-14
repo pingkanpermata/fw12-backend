@@ -1,9 +1,9 @@
-const genresRouter = require('express').Router()
-const {allGenre, deleteGenre, updateGenreId, createGenres} = require('../controllers/genre.controller')
+const {readAllGenre, createGenre, updateGenre,deleteGenre } = require('../controllers/genre.controller')
 
-genresRouter.get('/', allGenre)
-genresRouter.post('/', createGenres)
-genresRouter.delete('/:id', deleteGenre )
-genresRouter.patch('/:id', updateGenreId )
+const genreRouters = require('express').Router()
 
-module.exports = genresRouter
+genreRouters.get('/', readAllGenre)
+genreRouters.post('/', createGenre)
+genreRouters.patch('/:id', updateGenre)
+genreRouters.delete('/:id', deleteGenre)
+module.exports = genreRouters

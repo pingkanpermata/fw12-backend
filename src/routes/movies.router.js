@@ -1,12 +1,15 @@
-const moviesRouter = require('express').Router()
-const {allMovies, movieId, deleteMovieId, updateMovieId, createMovies, upComingMovies, nowShowing} = require('../controllers/movies.controller')
+const { upcoming } = require('../controllers/auth.controller')
+const {readAllMovies, createMovies, updateMovies, deleteMovies, nowShowing, selectOneMovies} = require('../controllers/movies.controller')
+const authMiddleware = require('../middleware/auth.middleware')
+const {uploadMiddleware} = require('../middleware/upload.middleware')
 
-moviesRouter.get('/', allMovies)
-moviesRouter.get('/upComingMovies',upComingMovies )
-moviesRouter.get('/nowShowing',nowShowing )
-moviesRouter.get('/:id', movieId)
-moviesRouter.post('/', createMovies)
-moviesRouter.delete('/:id', deleteMovieId )
-moviesRouter.patch('/:id', updateMovieId )
+const moviesRouters = require('express').Router()
 
-module.exports = moviesRouter
+// moviesRouters.get('/:id', selectOneMovies)
+moviesRouters.get('/', readAllMovies)
+moviesRouters.get('/upcoming', upcoming)
+moviesRouters.get('/nowShowing', nowShowing)
+moviesRouters.post('/', uploadMiddleware, createMovies)
+moviesRouters.patch('/:id', uploadMiddleware, updateMovies)
+moviesRouters.delete('/:id', deleteMovies)
+module.exports = moviesRouters

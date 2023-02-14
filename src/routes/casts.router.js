@@ -1,9 +1,9 @@
-const castsRouter = require('express').Router()
-const {allCasts, deleteCasts, updateCasts, createCasts} = require('../controllers/casts.controller')
+const {readAllCasts, createCasts, updateCasts,deleteCasts } = require('../controllers/casts.controller')
 
-castsRouter.get('/', allCasts)
-castsRouter.post('/', createCasts)
-castsRouter.delete('/:id', deleteCasts)
-castsRouter.patch('/:id', updateCasts )
+const castsRouters = require('express').Router()
 
-module.exports = castsRouter
+castsRouters.get('/', readAllCasts)
+castsRouters.post('/', createCasts)
+castsRouters.patch('/:id', updateCasts)
+castsRouters.delete('/:id', deleteCasts)
+module.exports = castsRouters

@@ -1,21 +1,28 @@
+require('dotenv').config({
+  path: '.env',
+})
+const { urlencoded } = require('express')
 const express = require('express')
 const cors = require('cors')
+const morgan = require('morgan')
 
 const app = express()
-app.use(express.json()) //untuk parsing json
-app.use(express.urlencoded({extended:true})) //untuk form encode
-app.use(cors()) //untuk membuka akses ke FE
+
+app.use(express.json())
+app.use(express.urlencoded({extended: false}))
+app.use(morgan('dev'))
+app.use(cors())
 
 app.use('/', require('./src/routes'))
-
-app.get('/', (req, res)=> { //membuat info bahwa backend kita bisa diakses atau tidak
+app.use("/uploads", express.static("uploads/"));
+app.get('/', (req,res) => {
     return res.status(200).json({
         success: true,
-        message: "Backend is running well"
+        message: "Backend running well"
     })
 })
 
-//membuka port app
-app.listen(8888, ()=> {
-    console.log('App listening on port 8888')
+const PORT = process.env.PORT || 8888
+app.listen(PORT, ()=> {
+    console.log(`App running on port ${PORT}`);
 })
