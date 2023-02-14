@@ -13,7 +13,7 @@ CREATE TABLE "users" (
     "updateAt"      TIMESTAMPTZ
 );
 
-CREATE TABLE "reset_password" (
+CREATE TABLE "resetPassword" (
     "id"            INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "email"         VARCHAR(255),
     "userId"        INT,
@@ -41,7 +41,7 @@ CREATE TABLE "genre" (
     "updatedAt"     TIMESTAMPTZ
 );
 
-CREATE TABLE "movie_genre" (
+CREATE TABLE "movieGenre" (
     "id"            INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "movieId"       INT,
     "genreId"       INT,
@@ -56,7 +56,7 @@ CREATE TABLE "casts" (
     "updatedAt"     TIMESTAMPTZ
 );
 
-CREATE TABLE "movie_casts" (
+CREATE TABLE "movieCasts" (
     "id"            INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "movieId"       INT,
     "castsId"       INT,
@@ -64,9 +64,8 @@ CREATE TABLE "movie_casts" (
     "updatedAt"     TIMESTAMPTZ
 );
 
-CREATE TABLE "cinema" (
+CREATE TABLE "cinemas" (
     "id"            INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    "picture"       VARCHAR(255),
     "name"          VARCHAR(255),
     "address"       VARCHAR(255),
     "city"          VARCHAR(255),
@@ -74,7 +73,7 @@ CREATE TABLE "cinema" (
     "updatedAt"     TIMESTAMPTZ
 );
 
-CREATE TABLE "movie_schedule" (
+CREATE TABLE "movieSchedule" (
     "id"            INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "movieId"       INT,
     "cinemaId"      INT,
@@ -85,7 +84,7 @@ CREATE TABLE "movie_schedule" (
     "updatedAt"     TIMESTAMPTZ
 );
 
-CREATE TABLE "movie_schedule_time" (
+CREATE TABLE "movieScheduleTime" (
     "id"                    INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "time"                  TIME,
     "movie_scheduleId"      INT,
@@ -100,7 +99,7 @@ CREATE TABLE "status" (
     "updatedAt"     TIMESTAMPTZ
 );
 
-CREATE TABLE "transaction" (
+CREATE TABLE "transactions" (
     "id"                    INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "bookingDate"           TIMESTAMPTZ,
     "movieId"               INT,
@@ -114,7 +113,7 @@ CREATE TABLE "transaction" (
     "updatedAt"             TIMESTAMPTZ
 );
 
-CREATE TABLE "reserved" (
+CREATE TABLE "reservedSeat" (
     "id"                INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "seatNumber"        VARCHAR(255),
     "transactionId"     INT,
@@ -122,7 +121,7 @@ CREATE TABLE "reserved" (
     "updatedAt"         TIMESTAMPTZ
 );
 
-CREATE TABLE "payment_method" (
+CREATE TABLE "paymentMethod" (
     "id"            INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "picture"       VARCHAR(255),
     "name"          VARCHAR(255),
