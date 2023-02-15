@@ -22,7 +22,7 @@ app.get('/', (req,res) => {
     })
 })
 
-const PORT = process.env.PORT || 8888
+const PORT = process.env.PORT || 5555
 app.listen(PORT, ()=> {
     console.log(`App running on port ${PORT}`);
 })
