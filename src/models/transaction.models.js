@@ -1,4 +1,4 @@
-const db = require('../helpers/db.helpers')
+const db = require('../helpers/db.helper')
 
 exports.insertOrder = async(data, cb)=> {
     try{

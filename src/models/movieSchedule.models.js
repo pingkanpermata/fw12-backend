@@ -1,4 +1,4 @@
-const db = require('../helpers/db.helpers')
+const db = require('../helpers/db.helper')
 
 exports.displayMovieSchedule = (cb)=>{
   const sql = 'SELECT * FROM movieSchedule';

@@ -1,4 +1,4 @@
-const db = require('../helpers/db.helpers')
+const db = require('../helpers/db.helper')
 
 exports.displaySubscribers = (cb) => {
   const sql = 'SELECT * FROM subscribers ORDER BY "createdAt" ASC';

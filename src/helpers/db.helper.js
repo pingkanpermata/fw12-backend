@@ -1,7 +1,7 @@
 const { Pool } = require("pg"); //pool ini digunakan untuk mengkoneksi dengan database postgree
 
 const db = new Pool({
-  connectionString :  ProcessingInstruction.ENV.database_URL || 'postgres://postgres:1@localhost:5432/wetix' //connectionstring untuk mengakses database
+  connectionString :  process.env.database_URL || 'postgres://postgres:1@localhost:5432/wetix' //connectionstring untuk mengakses database
 })
 
 db.connect((err) =>{

@@ -1,4 +1,4 @@
-const db = require('../helpers/db.helpers')
+const db = require('../helpers/db.helper')
 
 exports.displayResetPassword = (cb) => {
   const sql = 'SELECT * FROM resetPassword ORDER BY "createdAt" ASC';

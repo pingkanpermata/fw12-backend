@@ -1,5 +1,5 @@
 const { DatabaseError } = require('pg');
-const db = require('../helpers/db.helpers')
+const db = require('../helpers/db.helper')
 
 exports.displayCasts = (filter, cb)=>{
   const sql = `SELECT * FROM "casts" WHERE name LIKE $3 ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $1 OFFSET $2`;
