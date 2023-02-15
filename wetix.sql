@@ -142,7 +142,7 @@ INSERT INTO "users" ("picture","firstName","lastName","phoneNumber","email","pas
 VALUES ('https://www.freepik.com/free-photo/smiley-woman-posing-indoors_11095773.htm#query=profilewoman&position=9&from_view=search&track=ais',
 'Erika','Rose','50656009','erikarose@teleworm.us','erika007');
 
-INSERT INTO "reset_password" ("email","userId","code")
+INSERT INTO "resetPassword" ("email","userId","code")
 VALUES ('erikarose@teleworm.us',1,'rose123');
 
 INSERT INTO "movies" ("title","picture","releaseDate","directedBy","duration","synopsis")
@@ -154,35 +154,35 @@ that will unfold in something beyond real time.');
 INSERT INTO "genre" ("name")
 VALUES ('Action, Sci-fi, Thriller');
 
-INSERT INTO "movie_genre" ("movieId","genreId")
+INSERT INTO "movieGenre" ("movieId","genreId")
 VALUES (1,1);
 
 INSERT INTO "casts" ("name")
 VALUES ('John David Washington, Elizabeth Debicki, Andrew Howard');
 
-INSERT INTO "movie_casts" ("movieId","castsId")
+INSERT INTO "movieCasts" ("movieId","castsId")
 VALUES (1,1);
 
-INSERT INTO "cinema" ("picture","name","address","city")
-VALUES ('','hiflix','Metropolis Town Square Modernland','Tangerang');
+INSERT INTO "cinemas" ("name","address","city")
+VALUES ('hiflix','Metropolis Town Square Modernland','Tangerang');
 
-INSERT INTO "movie_schedule" ("movieId","cinemaId","price","startDate","endDate")
+INSERT INTO "movieSchedule" ("movieId","cinemaId","price","startDate","endDate")
 VALUES (1,1,25000,'11-22-2022','11-24-2022');
 
-INSERT INTO "movie_schedule_time" ("time","movie_scheduleId")
+INSERT INTO "movieScheduleTimes" ("time","movie_scheduleId")
 VALUES ('2:30:00',1);
 
 INSERT INTO "status" ("name")
 VALUES ('Active');
 
-INSERT INTO "transaction" ("bookingDate","movieId","cinemaId","movie_scheduleId",
+INSERT INTO "transactions" ("bookingDate","movieId","cinemaId","movie_scheduleId",
 "fullName","email","phoneNumber","statusId")
 VALUES ('11-23-2022 10:00:53',1,1,1,'Erika Rose','erikarose@teleworm.us','50656009','1');
 
-INSERT INTO "reserved" ("seatNumber","transactionId")
+INSERT INTO "reservedSeat" ("seatNumber","transactionId")
 VALUES ('C7,C8','1');
 
-INSERT INTO "payment_method" ("picture","name")
+INSERT INTO "paymentMethod" ("picture","name")
 VALUES ('','paypal');
 
 INSERT INTO "subscribers" ("email")
@@ -192,10 +192,10 @@ ALTER TABLE "users" ADD CONSTRAINT "email" UNIQUE ("email");
 ALTER TABLE "movies" ADD CONSTRAINT "title" UNIQUE ("title");
 ALTER TABLE "genre" ADD CONSTRAINT "genreName" UNIQUE ("name");
 ALTER TABLE "casts" ADD CONSTRAINT "castsName" UNIQUE ("name");
-ALTER TABLE "cinema" ADD CONSTRAINT "cinemaName" UNIQUE ("name");
+ALTER TABLE "cinemas" ADD CONSTRAINT "cinemaName" UNIQUE ("name");
 
-ALTER TABLE "reset_password" ADD CONSTRAINT "fk_userId" FOREIGN KEY ("userId") REFERENCES users (id) ON DELETE ON UPDATE CASCADE;
-ALTER TABLE "movie_genre" ADD CONSTRAINT "fk_movieId" FOREIGN KEY ("movieId") REFERENCES movies (id) ON DELETE ON UPDATE CASCADE;
+ALTER TABLE "resetPassword" ADD CONSTRAINT "fk_userId" FOREIGN KEY ("userId") REFERENCES users (id) ON DELETE ON UPDATE CASCADE;
+ALTER TABLE "movieGenre" ADD CONSTRAINT "fk_movieId" FOREIGN KEY ("movieId") REFERENCES movies (id) ON DELETE ON UPDATE CASCADE;
 ALTER TABLE "movie_casts" ADD CONSTRAINT "fk_castId" FOREIGN KEY ("castsId") REFERENCES casts (id) ON DELETE ON UPFATE CASCADE;
 ALTER TABLE "movie_schedules" ADD CONSTRAINT "fk_movieId" FOREIGN KEY ("movieId") REFERENCES movies (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "movie_schedules" ADD CONSTRAINT "fk_cinemaId" FOREIGN KEY ("cinemaId") REFERENCES cinemas (id) ON DELETE CASCADE ON UPDATE CASCADE;
